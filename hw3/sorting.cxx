@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
   if (rank == 0) {
     MPI_Gather(&x,1, MPI_INT, global.data(),1, MPI_INT, 0, MPI_COMM_WORLD); 
   } else {
-    MPI_Gather(&x,1, MPI_INT, nullptr ,1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Gather(&x,1, MPI_INT, 0 ,1, MPI_INT, 0, MPI_COMM_WORLD);
   } 
 
   
@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
   if (rank == 0) {
     MPI_Gather(&x,1, MPI_INT, global.data(),1, MPI_INT, 0, MPI_COMM_WORLD);
   } else {
-    MPI_Gather(&x,1, MPI_INT, nullptr ,1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Gather(&x,1, MPI_INT, 0 ,1, MPI_INT, 0, MPI_COMM_WORLD);
 
   } 
 
