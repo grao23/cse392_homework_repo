@@ -12,7 +12,6 @@ int read_input(int ifile) {
     std::cerr << "Input did not open" << ifile << "\n";
     std::exit(1);
   }
-
   int value;
   in >> value;
   return value;
@@ -34,7 +33,6 @@ void writing_output(int ifile, int value) {
     std::cerr << "Could not open output" << ifile << "\n";
     std::exit(1);
   }
-
   out << value << "\n";
 }
 
@@ -42,8 +40,7 @@ int main() {
   const int nfiles = 3;
 
   std::vector<int> inputs(nfiles, 0);
-  std::vector<int> outputs(nfiles, 0);
-
+  std::vector<int> outputs(nfiles, 0);\
   int *inptr = inputs.data();
   int *outptr = outputs.data();
 
@@ -52,30 +49,25 @@ int main() {
         #pragma omp single
     {
       for (int ifile = 0; ifile < nfiles; ifile++) {
-
 	// read inputs
 #pragma omp task firstprivate(ifile) depend(out: inptr[ifile])
 	{
 	  inptr[ifile] = read_input(ifile);
 	}
-
 	// output transformation
 #pragma omp task firstprivate(ifile) depend(in: inptr[0:ifile+1]) depend(out: outptr[ifile])
 	{
 	  outptr[ifile] = transform(inptr, ifile);
 	}
-
 	// write outputs
 #pragma omp task firstprivate(ifile) depend(in: outptr[ifile])
 	{
 	  writing_output(ifile, outptr[ifile]);
 	}
       }
-
             #pragma omp taskwait
     }
   }
-
   std::cout << "done\n";
   return 0;
 }
